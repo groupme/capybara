@@ -268,11 +268,20 @@ class Capybara::Driver::RackTest < Capybara::Driver::Base
     raise Capybara::InfiniteRedirectError, "redirected more than 5 times, check for infinite redirects." if response.redirect?
   end
 
+  def add_headers(headers={})
+    additional_headers.merge!(headers)
+  end
+
 private
+
+  def additional_headers
+    @additional_headers ||= {}
+  end
 
   def reset_cache
     @body = nil
     @html = nil
+    @additional_headers = {}
   end
 
   def build_rack_mock_session # :nodoc:
@@ -291,7 +300,7 @@ private
   end
 
   def env
-    env = {}
+    env = additional_headers
     begin
       env["HTTP_REFERER"] = request.url
     rescue Rack::Test::Error
@@ -299,5 +308,4 @@ private
     end
     env
   end
-
 end
