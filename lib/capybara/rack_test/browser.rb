@@ -108,7 +108,7 @@ protected
   end
 
   def env
-    env = {}
+    env = additional_headers
     begin
       env["HTTP_REFERER"] = last_request.url
     rescue Rack::Test::Error
