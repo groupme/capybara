@@ -88,6 +88,9 @@ class Capybara::RackTest::Browser
 
   def add_headers(headers = {})
     additional_headers.merge!(headers)
+    headers.each do |key,value|
+      send :header, key, value
+    end
   end
 
 protected
@@ -117,5 +120,4 @@ protected
     env.merge!(options[:headers]) if options[:headers]
     env
   end
-
 end
