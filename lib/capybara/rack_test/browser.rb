@@ -90,6 +90,9 @@ class Capybara::RackTest::Browser
   # Added support for adding arbitrary headers in before blocks -Pat, as told by Neil
   def add_headers(headers = {})
     additional_headers.merge!(headers)
+    headers.each do |key,value|
+      send :header, key, value
+    end
   end
 
 protected
@@ -119,5 +122,4 @@ protected
     env.merge!(options[:headers]) if options[:headers]
     env
   end
-
 end
