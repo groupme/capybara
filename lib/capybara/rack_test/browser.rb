@@ -24,9 +24,10 @@ class Capybara::RackTest::Browser
     process(method, path, attributes)
   end
 
+  # patched this not to use follow_redirect!, as that drops the user agent in mobile web testing
   def follow_redirects!
     5.times do
-      follow_redirect! if last_response.redirect?
+      get(last_response["Location"],{},env) if last_response.redirect?
     end
     raise Capybara::InfiniteRedirectError, "redirected more than 5 times, check for infinite redirects." if last_response.redirect?
   end
@@ -86,6 +87,7 @@ class Capybara::RackTest::Browser
     nil
   end
 
+  # Added support for adding arbitrary headers in before blocks -Pat, as told by Neil
   def add_headers(headers = {})
     additional_headers.merge!(headers)
   end
